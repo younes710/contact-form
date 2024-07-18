@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.MuiFormLabel-asterisk {
+.MuiFormLabel-asterisk,
+.MuiFormControlLabel-asterisk {
  color: red;
+}
+
+.MuiPaper-root {
+ background-color: green !important;
 }

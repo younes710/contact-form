@@ -5,12 +5,16 @@ import {
  Radio,
  Checkbox,
  Button,
+ Snackbar,
+ SnackbarContent,
 } from '@mui/material';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const ContactUsForm = () => {
  const [checkboxValidation, setCheckboxValidation] = useState(false);
+ const [showSnackbar, setShowSnackbar] = useState(false);
 
  // * hook form
  const {
@@ -35,6 +39,7 @@ const ContactUsForm = () => {
  const handleFormSubmit = (data) => {
   confirmValue ? setCheckboxValidation(false) : setCheckboxValidation(true);
   if (confirmValue) {
+   setShowSnackbar(true);
    setValue('confirm', false);
    setValue('types', '1');
    setValue('firstName', '');
@@ -45,11 +50,11 @@ const ContactUsForm = () => {
  };
 
  return (
-  <div className='w-[30rem] bg-white grid rounded mx-auto p-3 gap-3'>
+  <div className='w-[minmax(0,30rem)] bg-white grid rounded mx-auto p-3 gap-3'>
    <div className='border-b border-slate-300 pb-3'>
     <span className='font-bold'>Contact US</span>
    </div>
-   <div className='grid grid-cols-2 gap-3'>
+   <div className='grid grid-cols-2 max-sm:grid-cols-1 gap-3'>
     <TextField
      required
      size='small'
@@ -88,7 +93,7 @@ const ContactUsForm = () => {
     control={control}
     render={({ field }) => (
      <RadioGroup {...field} className='ms-3 -me-3'>
-      <div className='grid grid-cols-2 gap-3'>
+      <div className='grid grid-cols-2 max-sm:grid-cols-1 gap-3'>
        <FormControlLabel
         className='w-full rounded border border-slate-300'
         value='1'
@@ -120,10 +125,12 @@ const ContactUsForm = () => {
      control={control}
      render={({ field }) => (
       <FormControlLabel
+       key={`confirm-${confirmValue || ''}`}
        className='-my-1'
        value='2'
+       required
        control={<Checkbox {...field} defaultChecked={field.value} />}
-       label='I consent to being contacted by team'
+       label={'I consent to being contacted by team'}
       />
      )}
     />
@@ -139,6 +146,24 @@ const ContactUsForm = () => {
    >
     Submit
    </Button>
+   <Snackbar
+    open={showSnackbar}
+    autoHideDuration={5000}
+    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    onClose={() => setShowSnackbar(false)}
+   >
+    <SnackbarContent
+     message={
+      <div className='grid gap-3'>
+       <div className='flex gap-3'>
+        <CheckCircleOutlineIcon fontSize='small' />
+        <span>Message Sent !</span>
+       </div>
+       <span>Thanks for completing the form. We'll be in touch soon !</span>
+      </div>
+     }
+    />
+   </Snackbar>
   </div>
  );
 };
